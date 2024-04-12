@@ -9,38 +9,14 @@ import { filter, map, scan, startWith, takeWhile, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import PokemonComponent from './ui/pokemon.component';
 import { LoadingComponent } from './ui/loading.component';
+import { ToolbarComponent } from '../shared/ui/toolbar.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   template: `
     <div class="w-full h-full flex flex-col">
-      <mat-toolbar color="primary" class="shrink-0">
-        <picture>
-          <source
-            srcset="assets/icons/pokemon-logo-small.webp"
-            type="image/webp"
-          />
-          <source
-            srcset="assets/icons/pokemon-logo-small.png"
-            type="image/png"
-          />
-          <img
-            src="assets/icons/pokemon-logo-small.png"
-            height="64"
-            width="155"
-            alt="Pokemon Logo"
-          />
-        </picture>
-        <span class="flex-auto"></span>
-        <button
-          mat-icon-button
-          aria-label="Change Theme"
-          (click)="changeTheme()"
-        >
-          <mat-icon> brightness_6 </mat-icon>
-        </button>
-      </mat-toolbar>
+      <app-toolbar />
       <div class="flex-auto list" cdkScrollable>
         <ng-container *ngIf="pokemons$ | async as pokemons">
           <app-pokemon [pokemon]="pokemon" *ngFor="let pokemon of pokemons" />
@@ -62,9 +38,7 @@ import { LoadingComponent } from './ui/loading.component';
   imports: [
     CommonModule,
     ScrollingModule,
-    MatButtonModule,
-    MatToolbarModule,
-    MatIconModule,
+    ToolbarComponent,
     PokemonComponent,
     LoadingComponent,
   ],
@@ -72,11 +46,9 @@ import { LoadingComponent } from './ui/loading.component';
 export default class HomeComponent {
   data = inject(PokemonDataService);
   scroller = inject(ScrollDispatcher);
-  renderer = inject(Renderer2);
   #limit = 25;
   #reachedEnd = signal(false);
   reachedEnd = this.#reachedEnd.asReadonly();
-  #darktheme = signal(false);
   #pokemons = this.data.pokemons$;
   pokemons$ = this.#pokemons.valueChanges.pipe(
     map((x) => x.data.pokemon_v2_pokemon),
@@ -96,12 +68,6 @@ export default class HomeComponent {
       map((_, i) => i)
     )
   );
-  changeTheme = () => {
-    const darktheme = this.#darktheme();
-    if (darktheme) this.renderer.removeClass(document.body, 'dark-theme');
-    else this.renderer.addClass(document.body, 'dark-theme');
-    this.#darktheme.set(!darktheme);
-  };
   constructor() {
     effect(() => {
       const val = this.#loadMore() ?? 0;
