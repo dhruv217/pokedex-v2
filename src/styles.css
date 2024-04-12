@@ -1,1 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@tailwind base;
+@tailwind utilities;
+
+.list {
+  display: block;
+  overflow: auto;
+  contain: strict;
+  transform: translateZ(0);
+  will-change: scroll-position;
+  -webkit-overflow-scrolling: touch;
+}
+
+.type {
+  text-transform: capitalize;
+  font-size: 16px;
+  font-weight: 550;
+  --mdc-chip-label-text-color: white !important;
+}
+
+.normal {
+  --mdc-chip-elevated-container-color: #a8a878 !important;
+}
+.fire {
+  --mdc-chip-elevated-container-color: #f08030 !important;
+}
+.fighting {
+  --mdc-chip-elevated-container-color: #c03028 !important;
+}
+.water {
+  --mdc-chip-elevated-container-color: #6890f0 !important;
+}
+.grass {
+  --mdc-chip-elevated-container-color: #78c850 !important;
+}
+.poison {
+  --mdc-chip-elevated-container-color: #a040a0 !important;
+}
+.electric {
+  --mdc-chip-elevated-container-color: #f8d030 !important;
+}
+.ground {
+  --mdc-chip-elevated-container-color: #e0c068 !important;
+}
+.rock {
+  --mdc-chip-elevated-container-color: #b8a038 !important;
+}
+.bug {
+  --mdc-chip-elevated-container-color: #a8b820 !important;
+}
+.dragon {
+  --mdc-chip-elevated-container-color: #7038f8 !important;
+}
+.ghost {
+  --mdc-chip-elevated-container-color: #705898 !important;
+}
+.dark {
+  --mdc-chip-elevated-container-color: #705848 !important;
+}
+.fairy {
+  --mdc-chip-elevated-container-color: #ee99ac !important;
+}
+.steel {
+  --mdc-chip-elevated-container-color: #b8b8d0 !important;
+}
+.psychic {
+  --mdc-chip-elevated-container-color: #f85888 !important;
+}
+.ice {
+  --mdc-chip-elevated-container-color: #98d8d8 !important;
+}
+.flying {
+  --mdc-chip-elevated-container-color: #a890f0 !important;
+}
