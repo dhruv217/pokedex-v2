@@ -7,7 +7,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   selector: 'app-toolbar',
   standalone: true,
   template: `
-    <mat-toolbar color="primary" class="shrink-0">
+    <mat-toolbar color="primary" class="mat-elevation-z2 sticky z-10">
       <picture>
         <source
           srcset="assets/icons/pokemon-logo-small.webp"
@@ -34,8 +34,8 @@ export class ToolbarComponent {
   #darktheme = signal(false);
   changeTheme = () => {
     const darktheme = this.#darktheme();
-    if (darktheme) this.renderer.removeClass(document.body, 'dark-theme');
-    else this.renderer.addClass(document.body, 'dark-theme');
+    if (darktheme) this.renderer.removeClass(document.body, 'light-theme');
+    else this.renderer.addClass(document.body, 'light-theme');
     this.#darktheme.set(!darktheme);
   };
 }

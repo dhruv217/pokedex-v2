@@ -23,62 +23,132 @@ body {
 
 .type {
   text-transform: capitalize;
-  font-size: 16px;
-  font-weight: 550;
   --mdc-chip-label-text-color: white !important;
 }
 
 .normal {
-  --mdc-chip-elevated-container-color: #a8a878 !important;
+  background: #a8a878 !important;
+}
+.normal-darker {
+  color: white;
+  background: #86826f;
 }
 .fire {
-  --mdc-chip-elevated-container-color: #f08030 !important;
+  background: #f08030 !important;
+}
+.fire-darker {
+  color: white;
+  background: #e67605;
 }
 .fighting {
-  --mdc-chip-elevated-container-color: #c03028 !important;
+  background: #c03028 !important;
+}
+.fighting-darker {
+  color: white;
+  background: #b1261d;
 }
 .water {
-  --mdc-chip-elevated-container-color: #6890f0 !important;
+  background: #6890f0 !important;
+}
+.water-darker {
+  color: white;
+  background: #004bcb;
 }
 .grass {
-  --mdc-chip-elevated-container-color: #78c850 !important;
+  background: #78c850 !important;
+}
+.grass-darker {
+  color: white;
+  background: #438f34;
 }
 .poison {
-  --mdc-chip-elevated-container-color: #a040a0 !important;
+  background: #a040a0 !important;
+}
+.poison-darker {
+  color: white;
+  background: #721783;
 }
 .electric {
-  --mdc-chip-elevated-container-color: #f8d030 !important;
+  background: #f8d030 !important;
+}
+.electric-darker {
+  color: white;
+  background: #f3a122;
 }
 .ground {
-  --mdc-chip-elevated-container-color: #e0c068 !important;
+  background: #e0c068 !important;
+}
+.ground-darker {
+  color: white;
+  background: #c38900;
 }
 .rock {
-  --mdc-chip-elevated-container-color: #b8a038 !important;
+  background: #b8a038 !important;
+}
+.rock-darker {
+  color: white;
+  background: #977b2e;
 }
 .bug {
-  --mdc-chip-elevated-container-color: #a8b820 !important;
+  background: #a8b820 !important;
+}
+.bug-darker {
+  color: white;
+  background: #7f7a02;
 }
 .dragon {
-  --mdc-chip-elevated-container-color: #7038f8 !important;
+  background: #7038f8 !important;
+}
+.dragon-darker {
+  color: white;
+  background: #3e23e3;
 }
 .ghost {
-  --mdc-chip-elevated-container-color: #705898 !important;
+  background: #705898 !important;
+}
+.ghost-darker {
+  color: white;
+  background: #533982;
 }
 .dark {
-  --mdc-chip-elevated-container-color: #705848 !important;
+  background: #705848 !important;
+}
+.dark-darker {
+  color: white;
+  background: #554337;
 }
 .fairy {
-  --mdc-chip-elevated-container-color: #ee99ac !important;
+  background: #ee99ac !important;
+}
+.fairy-darker {
+  color: white;
+  background: #e3445d;
 }
 .steel {
-  --mdc-chip-elevated-container-color: #b8b8d0 !important;
+  background: #b8b8d0 !important;
+}
+.steel-darker {
+  color: white;
+  background: #1c2175;
 }
 .psychic {
-  --mdc-chip-elevated-container-color: #f85888 !important;
+  background: #f85888 !important;
+}
+.psychic-darker {
+  color: white;
+  background: #f00055;
 }
 .ice {
-  --mdc-chip-elevated-container-color: #98d8d8 !important;
+  background: #98d8d8 !important;
+}
+.ice-darker {
+  color: white;
+  background: #52bebd;
 }
 .flying {
-  --mdc-chip-elevated-container-color: #a890f0 !important;
+  background: #a890f0 !important;
+}
+.flying-darker {
+  color: white;
+  background: #6444d8;
 }

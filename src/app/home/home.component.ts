@@ -1,64 +1,95 @@
-import { Component, Renderer2, effect, inject, signal } from '@angular/core';
-import { PokemonDataService } from '../shared/pokemon-data.service';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { Pokemon, PokemonDataService } from '../shared/pokemon-data.service';
 import { ScrollDispatcher, ScrollingModule } from '@angular/cdk/scrolling';
-import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
-import { filter, map, scan, startWith, takeWhile, tap } from 'rxjs';
+import {
+  Subject,
+  filter,
+  map,
+  scan,
+  startWith,
+  switchMap,
+  takeWhile,
+  tap,
+} from 'rxjs';
 import { CommonModule } from '@angular/common';
 import PokemonComponent from './ui/pokemon.component';
-import { LoadingComponent } from './ui/loading.component';
-import { ToolbarComponent } from '../shared/ui/toolbar.component';
+import { LoadingComponent } from '../shared/ui/loading.component';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  MediaMatcher,
+} from '@angular/cdk/layout';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   template: `
-    <div class="w-full h-full flex flex-col">
-      <app-toolbar />
-      <div class="flex-auto list" cdkScrollable>
-        <ng-container *ngIf="pokemons$ | async as pokemons">
-          <app-pokemon [pokemon]="pokemon" *ngFor="let pokemon of pokemons" />
-        </ng-container>
-        <ng-container *ngIf="!reachedEnd()"></ng-container>
+    <div class="list h-full gap-4 p-8" cdkScrollable>
+      <app-pokemon
+        *ngFor="let pokemon of pokemons$ | async; trackBy: tracker"
+        [pokemon]="pokemon"
+        [routerLink]="['pokemon', pokemon.id]"
+        [state]="pokemon"
+      />
+      @if (!reachedEnd()) {
+      <div class="grid place-content-center">
         <app-loading />
       </div>
+      }
     </div>
   `,
   styles: `
     .list {
-      height: 100%;
-      padding: 1rem;
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      grid-gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      overflow: auto;
+      contain: strict;
+      transform: translateZ(0);
+      will-change: scroll-position;
+      -webkit-overflow-scrolling: touch;
+      @media(max-width: 360px) {
+        padding: 1rem 0.64rem;
+      }
     }
   `,
   imports: [
     CommonModule,
     ScrollingModule,
-    ToolbarComponent,
     PokemonComponent,
     LoadingComponent,
+    RouterModule,
   ],
 })
 export default class HomeComponent {
-  data = inject(PokemonDataService);
-  scroller = inject(ScrollDispatcher);
-  #limit = 25;
+  #data = inject(PokemonDataService);
+  #scroller = inject(ScrollDispatcher);
+  #breakpoints = inject(BreakpointObserver);
+  #limit = toSignal(
+    this.#breakpoints.observe([...displayNameMap.keys()]).pipe(
+      map((x) => {
+        for (const key of displayNameMap.keys()) {
+          if (x.breakpoints[key]) {
+            console.log(key, x.breakpoints[key]);
+            return displayNameMap.get(key);
+          }
+        }
+        return 25;
+      })
+    )
+  );
   #reachedEnd = signal(false);
   reachedEnd = this.#reachedEnd.asReadonly();
-  #pokemons = this.data.pokemons$;
-  pokemons$ = this.#pokemons.valueChanges.pipe(
-    map((x) => x.data.pokemon_v2_pokemon),
-    tap((x) => {
-      if (x.length !== this.#limit) this.#reachedEnd.set(true);
-    }),
-    scan((all, newEntires) => [...all, ...newEntires])
-  );
-  #loadMore = toSignal(
-    this.scroller.scrolled().pipe(
+  #loadMore = toSignal<number>(
+    this.#scroller.scrolled(100).pipe(
       filter((event) =>
         event ? event.measureScrollOffset('bottom') === 0 : false
       ),
@@ -68,11 +99,28 @@ export default class HomeComponent {
       map((_, i) => i)
     )
   );
+  offset$ = new Subject<{ offset: number; limit: number }>();
+  pokemons$ = this.offset$.asObservable().pipe(
+    switchMap((x) => this.#data.pokemons$(x)),
+    tap((x) => {
+      if (x.length !== this.#limit()) this.#reachedEnd.set(true);
+    }),
+    scan((all, newEntires) => [...all, ...newEntires])
+  );
   constructor() {
+    console.log(this.#limit());
     effect(() => {
-      const val = this.#loadMore() ?? 0;
-      const offset = val * this.#limit;
-      this.#pokemons.setVariables({ offset: offset, limit: this.#limit });
+      const limit = this.#limit() ?? 25;
+      const page = this.#loadMore() ?? 0;
+      this.offset$.next({ offset: page * limit, limit });
     });
   }
+  tracker = (_: number, pokemon: Pokemon) => pokemon.id;
 }
+const displayNameMap = new Map([
+  [Breakpoints.XSmall, 16],
+  [Breakpoints.Small, 21],
+  [Breakpoints.Medium, 50],
+  [Breakpoints.Large, 60],
+  [Breakpoints.XLarge, 120],
+]);

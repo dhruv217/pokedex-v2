@@ -1,35 +1,40 @@
-import { Component, Input } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { Pokemon } from '../../shared/pokemon-data.service';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { Pokemon } from '../../shared/pokemon-data.service';
+import { TypeColorDirective } from '../../shared/ui/type-color.directive';
 
 @Component({
   selector: 'app-pokemon',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <mat-card class="px-2" style="flex-direction: row">
+    <mat-card
+      class="pokemon px-2 items-center mx-auto"
+      [style]="'view-transition-name: bg-' + pokemon.id"
+      [typeColor]="pokemon.pokemon_v2_pokemontypes"
+    >
       <img
         [src]="pokemon.pokemon_v2_pokemonsprites[0].sprites"
+        style="width: 96px; height: 96px; margin-top: 1rem;"
+        [style]="'view-transition-name: img-' + pokemon.id"
         width="96px"
         height="96px"
-        class="pl-2 pr-4"
       />
-      <div class="flex flex-col justify-center">
-        <h2 mat-h2 style="text-transform: capitalize;">
-          #{{ pokemon.id }}: {{ pokemon.name }}
-        </h2>
-        <mat-chip-set aria-label="Pokemon Types">
-          <mat-chip
-            *ngFor="let type of pokemon.pokemon_v2_pokemontypes"
-            [class]="[type.pokemon_v2_type.name, 'type']"
-            >{{ type.pokemon_v2_type.name }}</mat-chip
-          >
-        </mat-chip-set>
+      <div
+        class="absolute left-0 right-0 bottom-0 text-white text-center bg-gray-600/80"
+      >
+        {{ pokemon.name | titlecase }}
       </div>
     </mat-card>
   `,
-  imports: [CommonModule, MatCardModule, MatChipsModule],
+  styles: `
+    .pokemon {
+      height: 140px;
+      width: 140px;
+    }
+  `,
+  imports: [CommonModule, MatCardModule, TypeColorDirective],
 })
 export default class PokemonComponent {
   @Input({ required: true }) pokemon!: Pokemon;

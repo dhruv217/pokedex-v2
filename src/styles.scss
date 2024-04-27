@@ -58,12 +58,12 @@ $mat-dark-theme-primary-palette: map-merge(
     ),
   )
 );
-$mat-dark-theme-primary:  mat.define-palette(
+$mat-dark-theme-primary: mat.define-palette(
   $mat-dark-theme-primary-palette,
   $default: 500,
   $lighter: A100,
   $darker: A700,
-  $text: 400,
+  $text: 400
 );
 
 $mat-dark-theme-accent-palette: map-merge(
@@ -130,16 +130,23 @@ $mat-dark-theme: mat.define-dark-theme(
   )
 );
 
-@include mat.icon-theme($mat-core-theme);
-@include mat.card-theme($mat-core-theme);
-@include mat.chips-theme($mat-core-theme);
-@include mat.button-theme($mat-core-theme);
-@include mat.toolbar-theme($mat-core-theme);
+@include mat.core-color($mat-dark-theme);
+@include mat.icon-color($mat-dark-theme);
+@include mat.card-color($mat-dark-theme);
+@include mat.chips-color($mat-dark-theme);
+@include mat.button-color($mat-dark-theme);
+@include mat.toolbar-color($mat-dark-theme);
+@include mat.list-color($mat-dark-theme);
+.light-theme {
+  @include mat.core-theme($mat-core-theme);
+  @include mat.icon-theme($mat-core-theme);
+  @include mat.card-theme($mat-core-theme);
+  @include mat.chips-theme($mat-core-theme);
+  @include mat.button-theme($mat-core-theme);
+  @include mat.toolbar-theme($mat-core-theme);
+  @include mat.list-theme($mat-core-theme);
+}
 
-.dark-theme {
-  @include mat.icon-color($mat-dark-theme);
-  @include mat.card-color($mat-dark-theme);
-  @include mat.chips-color($mat-dark-theme);
-  @include mat.button-color($mat-dark-theme);
-  @include mat.toolbar-color($mat-dark-theme);
+.pokemon:hover {
+  @include mat.elevation(4);
 }
